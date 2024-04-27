@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  # graceful shutdown makes sure we have time to finnish any ongoing rest requests before terminating
+  # default value will be 30s before terminating
+  shutdown: graceful
+
+spring:
+  application:
+    name: transfer-service
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5432/transfer_service?prepareThreshold=0
+    username: postgres
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 3
+      autoCommit: false
+    password: hendi34
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog-master.xml
+
+management:
+  server:
+    port: 9101
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+      base-path: "/"
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: transfer-service
+  # >
+  # By default, Spring Boot samples only 10% of requests to prevent overwhelming the trace backend.
+  # This property switches it to 100% so that every request is sent to the trace backend(I used Zipkin as the trace backend.)
+  tracing:
+    sampling:
+      probability: 1.0
+
+springdoc:
+  api-docs:
+    path: /transfer-docs
+  swagger-ui:
+    path: /transfer-docs/swagger-ui-custom.html
+
+logging.level:
+  id.my.hendisantika.transferservice: debug
+  org.springframework.jdbc.core: TRACE
+  io.micrometer.observation: TRACE

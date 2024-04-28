@@ -1,6 +1,7 @@
 package id.my.hendisantika.transferservice;
 
 import id.my.hendisantika.transferservice.domain.Deposit;
+import id.my.hendisantika.transferservice.dto.ApiErrorResponse;
 import id.my.hendisantika.transferservice.dto.DepositResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,32 @@ class TransferServiceApplicationTests {
 
         assertThat(depositResponse).isNotNull();
         assertThat(depositResponse.requestUid()).isEqualTo("1111-3333");
+    }
+
+    @Test
+    public void shouldReturnBadRequest_WhenRequestIsNotValid() {
+        String requestJson = """
+                {
+                   "requestUid": "123",
+                   "customerId": 1,
+                   "fromAccountNumber": "",
+                   "toAccountNumber": "account2",
+                   "amount": -5
+                 }
+                 """;
+        ApiErrorResponse errorResponse = webTestClient
+                .post().uri(API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestJson)
+                .exchange()
+                .expectStatus()
+                .is4xxClientError()
+                .expectBody(ApiErrorResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.errorCode()).isEqualTo(VALIDATION_ERROR_CODE);
+        assertThat(errorResponse.description()).contains("fromAccountNumber: must not be blank", "amount: must be greater than 0");
     }
 }

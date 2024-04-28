@@ -1,0 +1,29 @@
+package id.my.hendisantika.transferservice.metric;
+
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by IntelliJ IDEA.
+ * Project : transfer-service
+ * User: hendisantika
+ * Email: hendisantika@gmail.com
+ * Telegram : @hendisantika34
+ * Date: 4/28/24
+ * Time: 07:03
+ * To change this template use File | Settings | File Templates.
+ */
+@AllArgsConstructor
+@Slf4j
+@Component
+public class DepositMetricsService implements MetricsService {
+
+    public static final String CREATED_DEPOSITS = "created_deposits";
+    public static final String DEPOSIT_EXCEPTIONS = "deposit_exceptions";
+
+    private ObservationRegistry observationRegistry;
+    private MeterRegistry meterRegistry;
+}

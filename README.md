@@ -114,3 +114,19 @@ It means we're not locked into a specific tracing or monitoring tool. We can swi
 }
 ```
 
+### Image Screenshot
+
+Swagger UI
+
+![Swagger UI](img/Swagger-UI.png "Swagger UI")
+
+Grafana Dashboard
+
+![Grafana Dashboard](img/Grafana.png "Grafana Dashboard)
+
+Zipkin Dashboard
+
+![Zipkin Dashboard](img/zipkin1.png "Zipkin Dashboard")
+
+![Zipkin Dashboard](img/zipkin2.png "Zipkin Dashboard")
+

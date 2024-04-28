@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import static id.my.hendisantika.transferservice.controller.DepositController.REQUEST_UID;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -75,5 +76,9 @@ public class RestExceptionHandler {
                 .errorCode(INTERNAL_SERVER_ERROR.value())
                 .description(e.getMessage())
                 .build());
+    }
+
+    private static String getRequestIdentifier(ServletRequest request) {
+        return (String) request.getAttribute(REQUEST_UID);
     }
 }

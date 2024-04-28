@@ -122,7 +122,7 @@ Swagger UI
 
 Grafana Dashboard
 
-![Grafana Dashboard](img/Grafana.png "Grafana Dashboard)
+![Grafana Dashboard](img/Grafana.png "Grafana Dashboard")
 
 Zipkin Dashboard
 

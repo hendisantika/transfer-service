@@ -11,7 +11,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://localhost:5432/transfer_service?prepareThreshold=0
+    url: jdbc:postgresql://localhost:5433/transfer_service?prepareThreshold=0
     username: postgres
     driverClassName: org.postgresql.Driver
     hikari:

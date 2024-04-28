@@ -1,0 +1,89 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20240428-0" author="Hendi">
+        <sql>
+            CREATE TABLE if NOT EXISTS transfer_service.customer
+            (
+                id
+                BIGSERIAL
+                NOT
+                NULL
+                PRIMARY
+                KEY,
+                NAME
+                VARCHAR
+                NOT
+                NULL,
+                person_number
+                VARCHAR,
+                created_at
+                TIMESTAMP
+                DEFAULT
+                CURRENT_TIMESTAMP
+            );
+        </sql>
+        <rollback>
+            DROP TABLE transfer_service.customer;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="20240428-2" author="Hendi">
+        <sql>
+            CREATE TABLE if NOT EXISTS transfer_service.deposit
+            (
+                id
+                BIGSERIAL
+                PRIMARY
+                KEY,
+                request_uid
+                VARCHAR
+                NOT
+                NULL,
+                customer_id
+                BIGINT
+                NOT
+                NULL,
+                from_account_number
+                VARCHAR
+                NOT
+                NULL,
+                to_account_number
+                VARCHAR
+                NOT
+                NULL,
+                amount
+                NUMERIC
+                NOT
+                NULL,
+                created_at
+                TIMESTAMP
+                DEFAULT
+                CURRENT_TIMESTAMP,
+                CONSTRAINT
+                uq_request_uid
+                UNIQUE
+            (
+                request_uid
+            ),
+                CONSTRAINT deposit_customer_id_fkey FOREIGN KEY
+            (
+                customer_id
+            ) REFERENCES transfer_service.customer
+            (
+                id
+            )
+                );
+
+            CREATE INDEX if NOT EXISTS customer_id_idx ON transfer_service.deposit (customer_id);
+            CREATE INDEX if NOT EXISTS created_at_idx ON transfer_service.deposit (created_at);
+        </sql>
+        <rollback>
+            DROP TABLE IF EXISTS transfer_service.deposit;
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

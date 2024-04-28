@@ -96,4 +96,32 @@ class TransferServiceApplicationTests {
         assertThat(errorResponse.errorCode()).isEqualTo(VALIDATION_ERROR_CODE);
         assertThat(errorResponse.description()).contains("fromAccountNumber: must not be blank", "amount: must be greater than 0");
     }
+
+    @Test
+    public void shouldReturnNotFound_WhenCustomerNotFound_OnAddDepositRequest() {
+        String requestJson = """
+                {
+                   "requestUid": "123",
+                   "customerId": 2,
+                   "fromAccountNumber": "account1",
+                   "toAccountNumber": "account2",
+                   "amount": 25
+                 }
+                 """;
+        ApiErrorResponse errorResponse = webTestClient
+                .post().uri(API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestJson)
+                .exchange()
+                .expectStatus()
+                .isNotFound()
+                .expectBody(ApiErrorResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.requestUid()).isEqualTo("123");
+        assertThat(errorResponse.errorCode()).isEqualTo(CUSTOMER_NOT_FOUND_ERROR_CODE);
+        assertThat(errorResponse.description()).isEqualTo("Could not find customer, id: 2");
+    }
 }

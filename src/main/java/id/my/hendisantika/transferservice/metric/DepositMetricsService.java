@@ -1,6 +1,8 @@
 package id.my.hendisantika.transferservice.metric;
 
+import id.my.hendisantika.transferservice.domain.Deposit;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,4 +28,11 @@ public class DepositMetricsService implements MetricsService {
 
     private ObservationRegistry observationRegistry;
     private MeterRegistry meterRegistry;
+
+    @Override
+    public void countCreatedDeposits(Deposit deposit) {
+        Observation.createNotStarted(CREATED_DEPOSITS, observationRegistry)
+                .lowCardinalityKeyValue("request-uid", deposit.getRequestUid())
+                .observe(() -> log.debug("Counting created deposits"));
+    }
 }

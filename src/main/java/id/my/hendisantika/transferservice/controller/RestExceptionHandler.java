@@ -7,9 +7,14 @@ import jakarta.servlet.ServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
@@ -37,6 +42,26 @@ public class RestExceptionHandler {
                 .requestUid(getRequestIdentifier(request))
                 .errorCode(NOT_FOUND.value())
                 .description(e.getMessage())
+                .build());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleRequestNotValidException(ServletRequest request, MethodArgumentNotValidException e) {
+
+        List<String> errors = new ArrayList<>();
+        e.getBindingResult().getFieldErrors()
+                .forEach(error -> errors.add(error.getField() + ": " + error.getDefaultMessage()));
+        e.getBindingResult().getGlobalErrors()
+                .forEach(error -> errors.add(error.getObjectName() + ": " + error.getDefaultMessage()));
+
+        String message = "Validation of request failed: %s".formatted(String.join(", ", errors));
+        log.info(message);
+
+        metricsService.incrementExceptionCounter("exception_type", "ValidationException");
+        return ResponseEntity.status(BAD_REQUEST).body(ApiErrorResponse.builder()
+                .requestUid(getRequestIdentifier(request))
+                .errorCode(BAD_REQUEST.value())
+                .description(message)
                 .build());
     }
 }

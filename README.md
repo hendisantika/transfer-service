@@ -51,7 +51,7 @@ once your application is running.
 Access the following endpoints once your application is running:
 
 - Prometheus: [http://localhost:9090](http://localhost:9090)
-- Grafana Dashboard: [http://localhost:3003](http://localhost:3003)
+- Grafana Dashboard: [http://localhost:3000](http://localhost:3000)
 - Zipkin UI: [http://localhost:9411](http://localhost:9411)
 
 #### Metrics
@@ -101,3 +101,16 @@ OpenTelemetry is the observability framework which provides a standard way to co
 these data(metrics, traces, and logs) from our applications.
 It is vendor-neutral and supports a variety of backends, including Zipkin.
 It means we're not locked into a specific tracing or monitoring tool. We can switch or use multiple backends as needed.
+
+### Body Request
+
+```json
+{
+  "requestUid": "6881763f-d955-40e6-b040-26907c9c6377",
+  "customerId": 1,
+  "fromAccountNumber": "212",
+  "toAccountNumber": "100",
+  "amount": 1000
+}
+```
+

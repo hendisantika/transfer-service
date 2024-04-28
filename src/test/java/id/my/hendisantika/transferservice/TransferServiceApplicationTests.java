@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -34,6 +35,24 @@ class TransferServiceApplicationTests {
 
     @Test
     public void shouldAddDeposit_OnNewDepositRequest() {
+        Deposit deposit = DepositFixture.createDeposit();
+        DepositResponseDto depositResponse = webTestClient
+                .post().uri(API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(deposit)
+                .exchange()
+                .expectStatus()
+                .isCreated()
+                .expectBody(DepositResponseDto.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(depositResponse).isNotNull();
+        assertThat(depositResponse.requestUid()).isEqualTo("1111-3333");
+    }
+
+    @Test
+    public void shouldReturnTheSameResponse_OnDuplicateDepositRequest() {
         Deposit deposit = DepositFixture.createDeposit();
         DepositResponseDto depositResponse = webTestClient
                 .post().uri(API_URL)

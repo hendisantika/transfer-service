@@ -3,6 +3,7 @@ package id.my.hendisantika.transferservice;
 import id.my.hendisantika.transferservice.domain.Deposit;
 import id.my.hendisantika.transferservice.dto.ApiErrorResponse;
 import id.my.hendisantika.transferservice.dto.DepositResponseDto;
+import id.my.hendisantika.transferservice.fixture.DepositFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;

@@ -54,7 +54,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>8.0</version>
+            <version>8.1</version>
         </dependency>
 
         <!--It's used to compile Java code at runtime and Logback uses Janino to compile conditional expressions at runtime without having to recompile the code.-->
